@@ -21,6 +21,9 @@ class Mailbox(models.Model):
     def sent(self):
         return Email.objects.filter(mailbox=self).count()
 
+    def __str__(self):
+        return self.host
+
 
 class Template(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -30,6 +33,9 @@ class Template(models.Model):
     date = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.subject
+
 
 class Email(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -37,9 +43,12 @@ class Email(models.Model):
         'Mailbox', on_delete=models.PROTECT, related_name='emails')
     template = models.ForeignKey(
         'Template', on_delete=models.PROTECT, related_name='emails')
-    to = ArrayField(models.EmailField())
-    cc = ArrayField(models.EmailField(blank=True, null=True))
-    bcc = ArrayField(models.EmailField(blank=True, null=True))
-    reply_to = models.EmailField(default=None, blank=True, null=True)
-    send_date = models.DateTimeField()
+    to = ArrayField(models.EmailField(), blank=False)
+    cc = ArrayField(models.EmailField(), blank=True, null=True)
+    bcc = ArrayField(models.EmailField(), blank=True, null=True)
+    reply_to = models.EmailField(blank=True, null=True)
+    send_date = models.DateTimeField(null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return str(self.to)

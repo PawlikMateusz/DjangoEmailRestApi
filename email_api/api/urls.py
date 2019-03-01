@@ -1,10 +1,16 @@
-from django.urls import path
+from django.urls import path, include
+from rest_framework import routers
 
-from .views import test_view
+from .views import MailboxViewSet, EmailViewSet, TemplateViewSet
 
 app_name = "api"
 
-urlpatterns = [
-    path("", view=test_view, name="test"),
+router = routers.DefaultRouter()
+router.register('mailbox', MailboxViewSet)
+router.register('template', TemplateViewSet)
+router.register('email', EmailViewSet)
 
+
+urlpatterns = [
+    path("", include(router.urls)),
 ]
