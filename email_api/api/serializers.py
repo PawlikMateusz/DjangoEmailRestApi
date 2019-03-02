@@ -4,7 +4,7 @@ from .models import Email, Template, Mailbox
 
 
 class MailboxSerializer(serializers.ModelSerializer):
-    is_active = serializers.BooleanField(initial=True)
+    is_active = serializers.BooleanField(initial=False)
     use_ssl = serializers.BooleanField(initial=True)
 
     class Meta:
